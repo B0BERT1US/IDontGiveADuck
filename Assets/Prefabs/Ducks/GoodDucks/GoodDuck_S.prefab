@@ -151,7 +151,7 @@ MonoBehaviour:
   lifetime: 5
   moveSpeed: 0
   destroyEffect: {fileID: 0}
-  clickSound: {fileID: 0}
-  successParticles: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: 63971a7f50aaad44fae5d6134379572f, type: 3}
+  successParticles: {fileID: 6111780402021197907, guid: 6c3f332676c9b7146a16b045cf9a680a, type: 3}
   successTextPrefab: {fileID: 0}
   spriteRenderer: {fileID: 1339619373891858794}

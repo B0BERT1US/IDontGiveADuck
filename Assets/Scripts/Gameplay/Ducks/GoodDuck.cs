@@ -18,26 +18,27 @@ public class GoodDuck : BaseDuck
         base.Start();
         
     }
-    
+
     #region Abstract Implementation
-    
+
     protected override void OnClicked()
     {
         Debug.Log($"Good duck clicked! Awarded {pointValue} points");
-        
+
         // Notify game manager
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnGoodDuckClicked(this);
         }
-        
-        // Play success feedback
+
+        // Play success feedback (particle + sound)
         PlaySuccessEffects();
-        
-        // Destroy duck
+
+        // Now trigger duck destruction (handles shake + delay)
         DestroyDuck();
     }
-    
+
+
     protected override void OnLifetimeExpired()
     {
         Debug.Log("Good duck expired - player missed it!");

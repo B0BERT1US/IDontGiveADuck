@@ -87,11 +87,12 @@ public class AudioManager : MonoBehaviour
             GameManager.Instance.OnLevelLoaded -= OnLevelLoaded;
         }
     }
-    
+
+  
     #endregion
-    
+
     #region Initialisation
-    
+
     /// <summary>
     /// Sets up the audio system with proper AudioSource components
     /// 

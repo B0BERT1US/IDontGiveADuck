@@ -164,7 +164,7 @@ public abstract class BaseDuck : MonoBehaviour
             DestroyDuck();
         }
     }
-    
+   
     /// <summary>
     /// Handle duck movement (override in child classes)
     /// </summary>
@@ -173,34 +173,42 @@ public abstract class BaseDuck : MonoBehaviour
         // Base implementation - no movement
         // Override in child classes for moving ducks
     }
-    
+
     /// <summary>
     /// Common destruction logic with effects
     /// </summary>
     protected virtual void DestroyDuck()
     {
-        // Play destruction effects
+        // Screen shake
+        if (ScreenShake.Instance != null)
+            ScreenShake.Instance.Shake(); // uses default inspector settings
+
+        float destroyDelay = 0f;
+
         if (destroyEffect != null)
         {
-            // Create effect at duck position
             ParticleSystem effect = Instantiate(destroyEffect, transform.position, transform.rotation);
-            Destroy(effect.gameObject, effect.main.duration);
+            var main = effect.main;
+
+            // Wait for full particle lifetime (duration + startLifetime)
+            destroyDelay = main.duration + main.startLifetime.constantMax;
+
+            Destroy(effect.gameObject, destroyDelay);
         }
-        
-        // Play sound effect
+
         if (clickSound != null)
-        {
             AudioSource.PlayClipAtPoint(clickSound, transform.position);
-        }
-        
-        // Remove duck from scene
-        Destroy(gameObject);
+
+        // Delay duck removal until effect finishes
+        Destroy(gameObject, destroyDelay);
     }
-    
+
+
+
     #endregion
-    
+
     #region Abstract Methods - Must be implemented by child classes
-    
+
     /// <summary>
     /// Handle duck click behaviour - specific to each duck type
     /// </summary>

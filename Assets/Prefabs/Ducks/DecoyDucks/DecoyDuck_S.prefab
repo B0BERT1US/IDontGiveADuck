@@ -151,8 +151,8 @@ MonoBehaviour:
   lifetime: 5
   moveSpeed: 0
   destroyEffect: {fileID: 0}
-  clickSound: {fileID: 0}
-  penaltyParticles: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: 63971a7f50aaad44fae5d6134379572f, type: 3}
+  penaltyParticles: {fileID: 5033180708955247858, guid: 152689d6752175f4fa353ae19681fb33, type: 3}
   penaltySound: {fileID: 0}
   timePenalty: 5
   penaltyTextPrefab: {fileID: 0}
