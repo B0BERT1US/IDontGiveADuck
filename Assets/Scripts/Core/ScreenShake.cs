@@ -8,24 +8,28 @@ public class ScreenShake : MonoBehaviour
     [Header("Defaults")]
     [Tooltip("Default shake duration if not specified in code.")]
     public float defaultDuration = 0.12f;
+
     [Tooltip("Default shake strength (position).")]
     public float defaultAmplitude = 0.08f;
+
     [Tooltip("How quickly shake strength fades over time (1 = linear, higher = faster).")]
     public float damping = 1.5f;
+
     [Tooltip("How often direction changes (higher = more jitter).")]
     public float frequency = 25f;
 
     [Header("Rotation Shake")]
     [Tooltip("Enable slight camera rotation shake.")]
     public bool useRotation = true;
+
     [Tooltip("Max angle offset in degrees when rotation shake is enabled.")]
     public float rotationAmplitude = 4f;
 
-    Vector3 originalPos;
-    Quaternion originalRot;
-    Coroutine shakeRoutine;
+    private Vector3 originalPos;
+    private Quaternion originalRot;
+    private Coroutine shakeRoutine;
 
-    void Awake()
+    private void Awake()
     {
         Instance = this;
         originalPos = transform.localPosition;
@@ -46,7 +50,7 @@ public class ScreenShake : MonoBehaviour
         shakeRoutine = StartCoroutine(DoShake(dur, amp));
     }
 
-    IEnumerator DoShake(float duration, float amplitude)
+    private IEnumerator DoShake(float duration, float amplitude)
     {
         float elapsed = 0f;
         Vector3 randomOffset = Vector3.zero;
@@ -86,5 +90,4 @@ public class ScreenShake : MonoBehaviour
         transform.localRotation = originalRot;
         shakeRoutine = null;
     }
-
 }

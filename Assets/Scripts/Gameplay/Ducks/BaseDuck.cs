@@ -9,32 +9,42 @@ public abstract class BaseDuck : MonoBehaviour
 {
     [Header("Base Duck Properties")]
     [SerializeField] protected int pointValue = 1;
+
     [SerializeField] protected float lifetime = 5f;
     [SerializeField] protected float moveSpeed = 0f; // For future moving ducks
-    
+
     [Header("Visual Feedback")]
     [SerializeField] protected ParticleSystem destroyEffect;
+
     [SerializeField] protected AudioClip clickSound;
-    
+
+    [Header("Expire (Neutral)")]
+    [SerializeField] protected ParticleSystem expireEffectNeutral;
+
+    [SerializeField] protected AudioClip expireSoundNeutral;
+    [SerializeField] protected float expireSoundVolume = 1f;
+
     // Protected properties accessible to child classes
     protected float currentLifetime;
+
     protected bool isClicked = false;
     protected bool isInitialized = false;
-    
+
     // Public properties for external access
     public int PointValue => pointValue;
+
     public bool IsClicked => isClicked;
-    
+
     #region Unity Lifecycle
-    
+
     protected virtual void Start()
     {
         Initialize();
-        
+
         // Auto-fit collider to sprite bounds
         AutoFitCollider();
     }
-    
+
     /// <summary>
     /// Automatically fit the BoxCollider2D to the sprite bounds
     /// </summary>
@@ -42,16 +52,16 @@ public abstract class BaseDuck : MonoBehaviour
     {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
-        
+
         if (spriteRenderer != null && boxCollider != null && spriteRenderer.sprite != null)
         {
             // Set collider size to match sprite bounds exactly
             Vector2 spriteSize = spriteRenderer.sprite.bounds.size;
             boxCollider.size = spriteSize;
-            
+
             // Center the collider
             boxCollider.offset = Vector2.zero;
-            
+
             Debug.Log($"Auto-fitted collider for {gameObject.name}: size = {boxCollider.size}");
         }
         else
@@ -59,10 +69,10 @@ public abstract class BaseDuck : MonoBehaviour
             Debug.LogWarning($"Could not auto-fit collider for {gameObject.name} - missing components");
         }
     }
-    
+
     /// <summary>
     /// Called every frame by Unity - this is where we handle all duck behaviour
-    /// 
+    ///
     /// Update() is one of Unity's most important methods:
     /// - Called once per frame (typically 60 times per second)
     /// - Used for continuous updates like movement, timers, input
@@ -73,33 +83,34 @@ public abstract class BaseDuck : MonoBehaviour
         // Safety check: Don't do anything if duck isn't properly set up yet
         // This prevents errors during the brief moment between object creation and initialization
         if (!isInitialized) return;
-        
+
         // Handle duck lifetime countdown and expiration
         // This makes ducks disappear after their time is up
         HandleLifetime();
-        
+
         // Handle duck movement (if any)
         // Currently not implemented but ready for future moving ducks
         HandleMovement();
-        
+
         // Check if player has clicked on this duck
         // Uses Unity's new Input System for better input handling
         HandleClickDetection();
     }
+
     /// <summary>
     /// Handle mouse click detection using new Input System
     /// </summary>
     private void HandleClickDetection()
     {
         if (isClicked) return;
-        
+
         // Check if mouse button was pressed this frame
         if (Mouse.current?.leftButton.wasPressedThisFrame == true)
         {
             // Cast ray from mouse position to check if we hit this duck
             Vector2 mousePos = Mouse.current.position.ReadValue();
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-            
+
             Collider2D hitCollider = Physics2D.OverlapPoint(worldPos);
             if (hitCollider != null && hitCollider.gameObject == gameObject)
             {
@@ -111,7 +122,7 @@ public abstract class BaseDuck : MonoBehaviour
             }
         }
     }
-    
+
     // Keep OnMouseDown as backup for older Unity versions
     protected virtual void OnMouseDown()
     {
@@ -124,11 +135,11 @@ public abstract class BaseDuck : MonoBehaviour
             OnClicked();
         }
     }
-    
-    #endregion
-    
+
+    #endregion Unity Lifecycle
+
     #region Initialization
-    
+
     /// <summary>
     /// Initialise duck with custom properties
     /// </summary>
@@ -136,35 +147,35 @@ public abstract class BaseDuck : MonoBehaviour
     {
         currentLifetime = customLifetime > 0 ? customLifetime : lifetime;
         if (customPointValue > 0) pointValue = customPointValue;
-        
+
         isInitialized = true;
         OnDuckSpawned();
     }
-    
-    #endregion
-    
+
+    #endregion Initialization
+
     #region Core Behaviors
-    
+
     /// <summary>
     /// Handle duck lifetime countdown
     /// </summary>
     protected virtual void HandleLifetime()
     {
         currentLifetime -= Time.deltaTime;
-        
+
         // Visual feedback as lifetime gets low
         if (currentLifetime <= 1f)
         {
             OnLifetimeLow();
         }
-        
+
         if (currentLifetime <= 0 && !isClicked)
         {
             OnLifetimeExpired();
-            DestroyDuck();
+            DestroyDuckExpired();
         }
     }
-   
+
     /// <summary>
     /// Handle duck movement (override in child classes)
     /// </summary>
@@ -203,9 +214,30 @@ public abstract class BaseDuck : MonoBehaviour
         Destroy(gameObject, destroyDelay);
     }
 
+    /// <summary>
+    /// Neutral destruction path when the duck expires naturally (timeout).
+    /// Plays neutral VFX/SFX and (optionally) shake. No "clicked" effects.
+    /// </summary>
+    protected virtual void DestroyDuckExpired()
+    {
+        // Play neutral particle
+        if (expireEffectNeutral != null)
+        {
+            ParticleSystem fx = Instantiate(expireEffectNeutral, transform.position, transform.rotation);
+            Destroy(fx.gameObject, fx.main.duration);
+        }
 
+        // Play neutral/expire sound (no screenshake)
+        if (expireSoundNeutral != null)
+        {
+            AudioSource.PlayClipAtPoint(expireSoundNeutral, transform.position, expireSoundVolume);
+        }
 
-    #endregion
+        // Then remove the duck
+        Destroy(gameObject);
+    }
+
+    #endregion Core Behaviors
 
     #region Abstract Methods - Must be implemented by child classes
 
@@ -213,16 +245,16 @@ public abstract class BaseDuck : MonoBehaviour
     /// Handle duck click behaviour - specific to each duck type
     /// </summary>
     protected abstract void OnClicked();
-    
+
     /// <summary>
     /// Handle what happens when duck lifetime expires naturally
     /// </summary>
     protected abstract void OnLifetimeExpired();
-    
-    #endregion
-    
+
+    #endregion Abstract Methods - Must be implemented by child classes
+
     #region Virtual Methods - Can be overridden by child classes
-    
+
     /// <summary>
     /// Called when duck is first spawned
     /// </summary>
@@ -231,7 +263,7 @@ public abstract class BaseDuck : MonoBehaviour
         // Default implementation - can be overridden
         Debug.Log($"{GetType().Name} spawned at position {transform.position} with {currentLifetime}s lifetime");
     }
-    
+
     /// <summary>
     /// Called when duck lifetime is getting low (< 1 second)
     /// </summary>
@@ -240,11 +272,11 @@ public abstract class BaseDuck : MonoBehaviour
         // Default implementation - visual warning
         // Override for custom low-lifetime effects
     }
-    
-    #endregion
-    
+
+    #endregion Virtual Methods - Can be overridden by child classes
+
     #region Debug Helpers
-    
+
     protected virtual void OnDrawGizmos()
     {
         // Draw lifetime indicator in scene view
@@ -255,6 +287,6 @@ public abstract class BaseDuck : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position + Vector3.up, 0.5f);
         }
     }
-    
-    #endregion
+
+    #endregion Debug Helpers
 }

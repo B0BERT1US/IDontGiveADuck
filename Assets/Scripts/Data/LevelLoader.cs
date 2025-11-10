@@ -1,9 +1,9 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// LevelLoader - Handles loading level data from JSON files
-/// 
+///
 /// This class demonstrates several important programming concepts:
 /// - Singleton Pattern: Ensures only one instance exists
 /// - Caching: Improves performance by storing loaded data
@@ -14,11 +14,11 @@ public class LevelLoader : MonoBehaviour
 {
     // Singleton pattern - static instance accessible from anywhere
     public static LevelLoader Instance { get; private set; }
-    
+
     // Cache to store loaded levels and avoid reloading from disk
     private Dictionary<int, LevelData> levelCache = new Dictionary<int, LevelData>();
-    
-    void Awake()
+
+    private void Awake()
     {
         // Singleton pattern implementation
         // If no instance exists, make this the singleton
@@ -33,10 +33,10 @@ public class LevelLoader : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     /// <summary>
     /// Loads a level by its ID number
-    /// 
+    ///
     /// Process:
     /// 1. Check if level is already cached (performance optimisation)
     /// 2. If not cached, load from JSON file in Resources folder
@@ -51,23 +51,23 @@ public class LevelLoader : MonoBehaviour
         {
             return levelCache[levelId];
         }
-        
+
         // Create filename with zero-padding (e.g., "level_001", "level_012")
         // The :D3 format specifier ensures the level ID is always 3 digits with leading zeros
         // This creates consistent filenames that sort correctly in file systems
         string fileName = $"level_{levelId:D3}";
-        
+
         // Load JSON file from Unity's Resources system
         // Path: Assets/Resources/Data/Levels/level_001.json
         TextAsset levelFile = Resources.Load<TextAsset>($"Data/Levels/{fileName}");
-        
+
         if (levelFile != null)
         {
             try
             {
                 // Convert JSON text to LevelData object
                 LevelData levelData = JsonUtility.FromJson<LevelData>(levelFile.text);
-                
+
                 // Store in cache for future use
                 levelCache[levelId] = levelData;
                 return levelData;
@@ -86,10 +86,10 @@ public class LevelLoader : MonoBehaviour
             return CreateDefaultLevel(levelId);
         }
     }
-    
+
     /// <summary>
     /// Checks if the next level exists and returns its ID
-    /// 
+    ///
     /// This method enables level progression by checking if level files exist
     /// Returns -1 if no more levels are available (end of game)
     /// </summary>
@@ -97,17 +97,17 @@ public class LevelLoader : MonoBehaviour
     {
         int nextLevelId = currentLevelId + 1;
         string fileName = $"level_{nextLevelId:D3}";
-        
+
         // Try to load the next level file
         TextAsset levelFile = Resources.Load<TextAsset>($"Data/Levels/{fileName}");
-        
+
         // Return next level ID if file exists, otherwise -1 (no more levels)
         return levelFile != null ? nextLevelId : -1;
     }
-    
+
     /// <summary>
     /// Creates a default level when the actual level file is missing or corrupted
-    /// 
+    ///
     /// This is an example of defensive programming - always provide a fallback
     /// so the game doesn't crash when data is missing
     /// </summary>
@@ -137,13 +137,13 @@ public class LevelLoader : MonoBehaviour
             learningObjective = "Complete the level",
             powerUpsAvailable = false
         };
-        
+
         return defaultLevel;
     }
-    
+
     /// <summary>
     /// Clears the level cache to free up memory
-    /// 
+    ///
     /// Useful when switching between different level sets
     /// or when you want to force reloading of level data
     /// </summary>

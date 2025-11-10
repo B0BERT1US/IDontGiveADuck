@@ -1,5 +1,3 @@
-using UnityEngine;
-
 [System.Serializable]
 public class LevelData
 {
@@ -11,11 +9,12 @@ public class LevelData
     public float spawnRate;
     public float duckLifetime;
     public int decoyPenalty;
-    
+
     // New fields for continuous spawning logic
     public int maxTotalSpawns = 10;  // Maximum total good ducks that can spawn
+
     public bool continueSpawning = true;  // Whether to continue spawning after initial good ducks
-    
+
     [System.Serializable]
     public class SizeDistribution
     {
@@ -23,7 +22,7 @@ public class LevelData
         public float medium;
         public float small;
     }
-    
+
     public SizeDistribution sizeDistribution;
     public string[] specialMechanics;
     public string backgroundMusic;

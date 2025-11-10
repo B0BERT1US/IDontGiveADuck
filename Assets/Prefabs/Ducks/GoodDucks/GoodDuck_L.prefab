@@ -152,6 +152,9 @@ MonoBehaviour:
   moveSpeed: 0
   destroyEffect: {fileID: 0}
   clickSound: {fileID: 8300000, guid: 63971a7f50aaad44fae5d6134379572f, type: 3}
+  expireEffectNeutral: {fileID: 4250298743439401353, guid: 184c47b8b8e4c814d8241a901f177515, type: 3}
+  expireSoundNeutral: {fileID: 8300000, guid: 86a68c4d54f9b4348933ec32bee401ed, type: 3}
+  expireSoundVolume: 1
   successParticles: {fileID: 6111780402021197907, guid: 6c3f332676c9b7146a16b045cf9a680a, type: 3}
   successTextPrefab: {fileID: 0}
   spriteRenderer: {fileID: 1339619373891858794}

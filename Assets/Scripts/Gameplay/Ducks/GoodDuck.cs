@@ -7,16 +7,15 @@ public class GoodDuck : BaseDuck
 {
     [Header("Good Duck Settings")]
     [SerializeField] private ParticleSystem successParticles;
+
     [SerializeField] private GameObject successTextPrefab; // Optional floating text
-    
+
     [Header("Visual Feedback")]
     [SerializeField] private SpriteRenderer spriteRenderer;
-   
-    
+
     protected override void Start()
     {
         base.Start();
-        
     }
 
     #region Abstract Implementation
@@ -38,45 +37,44 @@ public class GoodDuck : BaseDuck
         DestroyDuck();
     }
 
-
     protected override void OnLifetimeExpired()
     {
         Debug.Log("Good duck expired - player missed it!");
-        
+
         // Notify game manager about missed duck
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnGoodDuckMissed(this);
         }
-        
+
         // No special effects for missed ducks
     }
-    
-    #endregion
-    
+
+    #endregion Abstract Implementation
+
     #region Virtual Overrides
-    
+
     protected override void OnDuckSpawned()
     {
         base.OnDuckSpawned();
-        
+
         // Good duck specific spawn behaviour
         // Could add spawn animation, sound, etc.
-        
+
         // Ensure proper tag for identification
         gameObject.tag = "GoodDuck";
     }
-    
+
     protected override void OnLifetimeLow()
     {
         base.OnLifetimeLow();
         // Could add sprite swap or animation here if needed
     }
-    
-    #endregion
-    
+
+    #endregion Virtual Overrides
+
     #region Good Duck Specific Methods
-    
+
     /// <summary>
     /// Play success effects when clicked
     /// </summary>
@@ -89,13 +87,13 @@ public class GoodDuck : BaseDuck
             effect.Play();
             Destroy(effect.gameObject, effect.main.duration);
         }
-        
+
         // Sound effect - use AudioManager for consistency
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.PlayDuckClickGood(transform.position);
         }
-        
+
         // Floating score text (optional)
         if (successTextPrefab != null)
         {
@@ -103,7 +101,6 @@ public class GoodDuck : BaseDuck
             // Assume the prefab has a script to handle floating animation
         }
     }
-    
-    #endregion
 
+    #endregion Good Duck Specific Methods
 }
