@@ -2839,7 +2839,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 1094684067}
-  timeLabel: {fileID: 0}
   fillColor:
     serializedVersion: 2
     key0: {r: 0.28747928, g: 1, b: 0, a: 1}
@@ -4275,6 +4274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1909912757}
   - component: {fileID: 1909912756}
+  - component: {fileID: 1909912758}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4295,7 +4295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingLives: 1
-  currentLevelId: 1
+  currentLevelId: 5
   testLevelId: 12
   enableTestTools: 0
   score: 0
@@ -4305,6 +4305,7 @@ MonoBehaviour:
   goodDucksMissed: 0
   totalGoodDucksSpawned: 0
   Timeslider: {fileID: 1094684067}
+  BGSwitch: {fileID: 1909912758}
 --- !u!4 &1909912757
 Transform:
   m_ObjectHideFlags: 0
@@ -4320,6 +4321,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1909912758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909912755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2e800bb347fa3c45a5333ecd7116bff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hud_bg: {fileID: 1253182321}
+  BG1: {fileID: 8820063365438424339, guid: 5f1083221362a2e40b1a4238f4cfbb50, type: 3}
+  BG2: {fileID: 3510003433056590093, guid: 0309f935a8b429f4c8ec6d7b79329d9b, type: 3}
+  BG3: {fileID: -4583543847438094861, guid: f9ee8e21c88ecb64db3fcf39fa1fcf99, type: 3}
+  BG4: {fileID: -1974042178797025698, guid: c9f20daded635ae4ea5cba36ada9cb66, type: 3}
+  gameManager: {fileID: 1909912756}
 --- !u!1 &1941380118
 GameObject:
   m_ObjectHideFlags: 0

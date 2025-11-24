@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
     public System.Action<float> OnTimeChanged;          // Fired when time changes
     public System.Action<GameState> OnGameStateChanged; // Fired when game state changes
     public System.Action<LevelData> OnLevelLoaded;      // Fired when a new level is loaded
-
+    public BackgroundSwitch BGSwitch;
     #region Unity Lifecycle
 
     /// <summary>
@@ -142,6 +142,7 @@ public class GameManager : MonoBehaviour
 
         // Load level data from JSON file
         currentLevel = LevelLoader.Instance.LoadLevel(currentLevelId);
+        BGSwitch.ChangeBackground();
 
         if (currentLevel == null)
         {

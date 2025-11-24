@@ -4,13 +4,9 @@ using UnityEngine.UI;
 
 public class TimeSliderUI : MonoBehaviour
 {
-    [Header("References")]
     [SerializeField] private Slider slider;
 
-    [SerializeField] private TextMeshProUGUI timeLabel;
 
-    [Header("Visuals")]
-    [Tooltip("Color changes as time runs out")]
     [SerializeField] private Gradient fillColor;
 
     private Image _fillImage;
@@ -23,7 +19,6 @@ public class TimeSliderUI : MonoBehaviour
         if (slider.fillRect)
             _fillImage = slider.fillRect.GetComponent<Image>();
 
-        //  Remove default padding gap (Left/Right offsets) on the Fill Area
         var fillArea = slider.transform.Find("Fill Area") as RectTransform;
         if (fillArea)
         {
@@ -31,7 +26,6 @@ public class TimeSliderUI : MonoBehaviour
             fillArea.offsetMax = new Vector2(0, fillArea.offsetMax.y);
         }
 
-        // default gradient if not assigned
         if (fillColor == null)
         {
             var g = new Gradient();
@@ -49,7 +43,6 @@ public class TimeSliderUI : MonoBehaviour
             fillColor = g;
         }
 
-        //  Ensure slider range is correct
         slider.minValue = 0f;
         slider.maxValue = 1f;
         slider.interactable = false;
@@ -86,34 +79,22 @@ public class TimeSliderUI : MonoBehaviour
         var gm = GameManager.Instance;
         if (!gm || _totalTime <= 0f) return;
 
-        //  Snap-to-zero logic to avoid sliver at the end
         if (gm.TimeLeft <= 0.001f)
         {
             slider.value = 0f;
             if (_fillImage) _fillImage.color = fillColor.Evaluate(1f);
-            if (timeLabel) timeLabel.text = "0:00";
-            return;
+     
         }
 
         float ratio = Mathf.Clamp01(gm.TimeLeft / _totalTime);
 
-        // Update slider
         slider.value = ratio;
 
-        // Update color
         if (_fillImage)
             _fillImage.color = fillColor.Evaluate(1f - ratio);
 
-        // Update label
-        if (timeLabel)
-            timeLabel.text = FormatTime(gm.TimeLeft);
+       
     }
 
-    private static string FormatTime(float seconds)
-    {
-        seconds = Mathf.Max(0f, seconds);  // clamp avoids negative/NaN glitches
-        int m = Mathf.FloorToInt(seconds / 60f);
-        int s = Mathf.FloorToInt(seconds % 60f);
-        return $"{m:0}:{s:00}";
-    }
+
 }
