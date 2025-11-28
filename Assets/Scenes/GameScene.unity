@@ -4295,7 +4295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingLives: 1
-  currentLevelId: 5
+  currentLevelId: 1
   testLevelId: 12
   enableTestTools: 0
   score: 0
