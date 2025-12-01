@@ -31,12 +31,20 @@ public class GameManager : MonoBehaviour
 
     [Header("Current Game State")]
     [SerializeField] private int score = 0;             // Player's current score
+    public int Money => score;
 
     [SerializeField] private int lives = 1;             // Remaining lives
     [SerializeField] private float timeLeft = 30f;      // Time remaining in current level
     [SerializeField] private int goodDucksClicked = 0;  // Number of good ducks clicked
     [SerializeField] private int goodDucksMissed = 0;   // Number of good ducks missed
     [SerializeField] private int totalGoodDucksSpawned = 0; // Total good ducks spawned this level
+
+    [Header("Grade System")]
+    private string currentGrade = "D";   // default starting grade
+    public string CurrentGrade => currentGrade;
+    public System.Action<string> OnGradeChanged;
+
+
 
     [Header("Current Game State")]
     public Slider Timeslider;
@@ -97,6 +105,7 @@ public class GameManager : MonoBehaviour
         if (currentState == GameState.Playing)
         {
             UpdateGameTimer();
+            UpdateGradeLive();
             Timeslider.gameObject.SetActive(true);
         }
         else
@@ -324,6 +333,9 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(currentState);
     }
 
+
+
+
     /// <summary>
     /// Ends the current level (win or lose)
     ///
@@ -343,6 +355,7 @@ public class GameManager : MonoBehaviour
         {
             HandleGameOver();
         }
+
 
         currentState = won ? GameState.LevelComplete : GameState.GameOver;
 
@@ -597,25 +610,69 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion Scene Management
-}
+    private void UpdateGradeLive()
+    {
+        if (currentLevel == null) return;
 
-/// <summary>
-/// GameState enumeration - defines all possible states of the game
-///
-/// This creates a state machine that controls game flow:
-/// - Menu: Main menu/instructions screen
-/// - Playing: Active gameplay
-/// - Paused: Game is paused
-/// - LevelComplete: Level finished successfully
-/// - GameOver: Level failed
-/// - GameComplete: All levels completed
-/// </summary>
-public enum GameState
-{
-    Menu,           // Main menu/instructions
-    Playing,        // Active gameplay
-    Paused,         // Game paused
-    LevelComplete,  // Level finished successfully
-    GameOver,       // Level failed
-    GameComplete    // All levels completed
+        int required = currentLevel.goodDucks;
+        if (required <= 0)
+        {
+            SetGradeIfChanged("D");
+            return;
+        }
+
+        float duckRatio = (float)goodDucksClicked / required;
+        duckRatio = Mathf.Clamp01(duckRatio);
+
+        float timeRatio = 0f;
+        if (currentLevel.timeLimit > 0f)
+        {
+            timeRatio = Mathf.Clamp01(timeLeft / currentLevel.timeLimit);
+        }
+
+        float performance = (duckRatio * 0.7f) + (timeRatio * 0.3f);
+
+        string newGrade;
+        if (performance >= 0.90f) newGrade = "S";
+        else if (performance >= 0.75f) newGrade = "A";
+        else if (performance >= 0.60f) newGrade = "B";
+        else if (performance >= 0.40f) newGrade = "C";
+        else newGrade = "D";
+
+        SetGradeIfChanged(newGrade);
+    }
+
+    private void SetGradeIfChanged(string newGrade)
+    {
+        if (string.IsNullOrEmpty(newGrade))
+            newGrade = "D";
+
+        if (newGrade != currentGrade)
+        {
+            currentGrade = newGrade;
+            OnGradeChanged?.Invoke(currentGrade);
+        }
+    }
+
+
+    /// <summary>
+    /// GameState enumeration - defines all possible states of the game
+    ///
+    /// This creates a state machine that controls game flow:
+    /// - Menu: Main menu/instructions screen
+    /// - Playing: Active gameplay
+    /// - Paused: Game is paused
+    /// - LevelComplete: Level finished successfully
+    /// - GameOver: Level failed
+    /// - GameComplete: All levels completed
+    /// </summary>
+    public enum GameState
+    {
+        Menu,           // Main menu/instructions
+        Playing,        // Active gameplay
+        Paused,         // Game paused
+        LevelComplete,  // Level finished successfully
+        GameOver,       // Level failed
+        GameComplete    // All levels completed
+    }
 }

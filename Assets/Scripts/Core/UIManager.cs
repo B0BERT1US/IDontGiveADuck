@@ -1,7 +1,9 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
+using static GameManager;
 
 /// <summary>
 /// UIManager - Centralised UI system for the game
@@ -162,8 +164,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void UpdateScore(int score)
     {
-        if (scoreText != null)
-            scoreText.text = $"Score: {score:N0}";
+       scoreText.text = "Score: " + "£" + GameManager.Instance.Money;
+
     }
 
     /// <summary>

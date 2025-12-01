@@ -1,4 +1,5 @@
 using UnityEngine;
+using static GameManager;
 
 /// <summary>
 /// AudioManager - Centralised audio system for the game
