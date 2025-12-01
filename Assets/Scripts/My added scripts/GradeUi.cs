@@ -4,7 +4,7 @@ using TMPro;
 public class GradeUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI gradeLabel;
-    [SerializeField] private string prefix = " ";
+    [SerializeField] private string prefix = "Grade: ";
 
     void Awake()
     {
@@ -12,32 +12,16 @@ public class GradeUI : MonoBehaviour
             gradeLabel = GetComponent<TextMeshProUGUI>();
     }
 
-    void OnEnable()
+    void Update()
     {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnGradeChanged += HandleGradeChanged;
+        var gm = GameManager.Instance;
+        if (gm == null || gradeLabel == null)
+            return;
 
-            // Initialise text with current grade if game already started
-            HandleGradeChanged(GameManager.Instance.CurrentGrade);
-        }
-    }
-
-    void OnDisable()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnGradeChanged -= HandleGradeChanged;
-        }
-    }
-
-    private void HandleGradeChanged(string grade)
-    {
+        string grade = gm.CurrentGrade;
         if (string.IsNullOrEmpty(grade))
             grade = "D";
 
-        if (!gradeLabel) return;
         gradeLabel.text = prefix + grade;
     }
-
 }

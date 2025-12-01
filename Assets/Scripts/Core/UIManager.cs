@@ -164,7 +164,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void UpdateScore(int score)
     {
-       scoreText.text = "Score: " + "£" + GameManager.Instance.Money;
+       scoreText.text = "The Take: " + "£" + GameManager.Instance.Money;
 
     }
 
@@ -356,7 +356,7 @@ public class UIManager : MonoBehaviour
 
             // Show the final score
             if (finalScoreText != null && GameManager.Instance != null)
-                finalScoreText.text = $"Final Score: {GameManager.Instance.Score:N0}";
+                finalScoreText.text = $"Current Take: {GameManager.Instance.Score:N0}";
 
             // Show/hide next level button based on whether there is a next level
             if (nextLevelButton != null)
@@ -383,7 +383,7 @@ public class UIManager : MonoBehaviour
             gameOverPanel.SetActive(true);
 
             if (gameOverTitle != null)
-                gameOverTitle.text = "Level Failed!";
+                gameOverTitle.text = "Heist Failed!";
 
             if (finalScoreText != null && GameManager.Instance != null)
                 finalScoreText.text = "Restart from Level 1";

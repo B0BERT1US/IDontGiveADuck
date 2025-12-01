@@ -40,9 +40,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int totalGoodDucksSpawned = 0; // Total good ducks spawned this level
 
     [Header("Grade System")]
-    private string currentGrade = "D";   // default starting grade
-    public string CurrentGrade => currentGrade;
+    public string CurrentGrade { get; private set; } = "D";
     public System.Action<string> OnGradeChanged;
+
+    // Grade thresholds based on MONEY (score)
+    [Header("Grade Thresholds (Money)")]
+    [SerializeField] private int gradeDThreshold = 0;
+    [SerializeField] private int gradeCThreshold = 50;
+    [SerializeField] private int gradeBThreshold = 100;
+    [SerializeField] private int gradeAThreshold = 150;
+    [SerializeField] private int gradeSThreshold = 200;
+
 
 
 
@@ -612,47 +620,23 @@ public class GameManager : MonoBehaviour
     #endregion Scene Management
     private void UpdateGradeLive()
     {
-        if (currentLevel == null) return;
-
-        int required = currentLevel.goodDucks;
-        if (required <= 0)
-        {
-            SetGradeIfChanged("D");
-            return;
-        }
-
-        float duckRatio = (float)goodDucksClicked / required;
-        duckRatio = Mathf.Clamp01(duckRatio);
-
-        float timeRatio = 0f;
-        if (currentLevel.timeLimit > 0f)
-        {
-            timeRatio = Mathf.Clamp01(timeLeft / currentLevel.timeLimit);
-        }
-
-        float performance = (duckRatio * 0.7f) + (timeRatio * 0.3f);
+        int money = score; // Score is money
 
         string newGrade;
-        if (performance >= 0.90f) newGrade = "S";
-        else if (performance >= 0.75f) newGrade = "A";
-        else if (performance >= 0.60f) newGrade = "B";
-        else if (performance >= 0.40f) newGrade = "C";
+
+        if (money >= gradeSThreshold) newGrade = "S";
+        else if (money >= gradeAThreshold) newGrade = "A";
+        else if (money >= gradeBThreshold) newGrade = "B";
+        else if (money >= gradeCThreshold) newGrade = "C";
         else newGrade = "D";
 
-        SetGradeIfChanged(newGrade);
-    }
-
-    private void SetGradeIfChanged(string newGrade)
-    {
-        if (string.IsNullOrEmpty(newGrade))
-            newGrade = "D";
-
-        if (newGrade != currentGrade)
+        if (newGrade != CurrentGrade)
         {
-            currentGrade = newGrade;
-            OnGradeChanged?.Invoke(currentGrade);
+            CurrentGrade = newGrade;
+            OnGradeChanged?.Invoke(CurrentGrade);
         }
     }
+
 
 
     /// <summary>
