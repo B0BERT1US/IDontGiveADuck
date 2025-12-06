@@ -1,11 +1,9 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TimeSliderUI : MonoBehaviour
 {
     [SerializeField] private Slider slider;
-
 
     [SerializeField] private Gradient fillColor;
 
@@ -83,7 +81,6 @@ public class TimeSliderUI : MonoBehaviour
         {
             slider.value = 0f;
             if (_fillImage) _fillImage.color = fillColor.Evaluate(1f);
-     
         }
 
         float ratio = Mathf.Clamp01(gm.TimeLeft / _totalTime);
@@ -92,9 +89,5 @@ public class TimeSliderUI : MonoBehaviour
 
         if (_fillImage)
             _fillImage.color = fillColor.Evaluate(1f - ratio);
-
-       
     }
-
-
 }

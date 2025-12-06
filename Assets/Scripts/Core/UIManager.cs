@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using static GameManager;
 
@@ -164,8 +163,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void UpdateScore(int score)
     {
-       scoreText.text = "The Take: " + "£" + GameManager.Instance.Money;
-
+        scoreText.text = "The Take: " + "£" + GameManager.Instance.Money;
     }
 
     /// <summary>
@@ -358,7 +356,6 @@ public class UIManager : MonoBehaviour
             if (finalScoreText != null && GameManager.Instance != null)
                 finalScoreText.text = $"Current Take: £{GameManager.Instance.Score:N0}";
 
-
             // Show/hide next level button based on whether there is a next level
             if (nextLevelButton != null)
             {
@@ -411,7 +408,6 @@ public class UIManager : MonoBehaviour
             // In ShowGameComplete()
             if (finalScoreText != null && GameManager.Instance != null)
                 finalScoreText.text = $"Final Take: £{GameManager.Instance.Score:N0}";
-
 
             // Hide next level button since game is complete
             if (nextLevelButton != null)

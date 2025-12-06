@@ -1,12 +1,12 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class EndRoundScoreboard : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI moneyLabel;
     [SerializeField] private TextMeshProUGUI gradeLabel;
 
-    void OnEnable()
+    private void OnEnable()
     {
         var gm = GameManager.Instance;
         if (gm == null) return;

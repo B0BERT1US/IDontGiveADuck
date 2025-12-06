@@ -41,7 +41,6 @@ public class ScreenShake : MonoBehaviour
         float dur = duration ?? defaultDuration;
         float amp = amplitude ?? defaultAmplitude;
 
-        // Guard: never allow zero/neg duration
         if (dur <= 0f) dur = 0.01f;
 
         if (shakeRoutine != null)
@@ -60,22 +59,18 @@ public class ScreenShake : MonoBehaviour
         {
             elapsed += Time.deltaTime;
 
-            // Pick a new random direction at the chosen frequency
             if (elapsed >= nextChangeTime)
             {
-                Vector2 dir = Random.insideUnitCircle.normalized; // safe 2D random
+                Vector2 dir = Random.insideUnitCircle.normalized;
                 randomOffset = new Vector3(dir.x, dir.y, 0f) * amplitude;
                 nextChangeTime = elapsed + (1f / Mathf.Max(1f, frequency));
             }
 
-            // Clamp base to avoid negative -> NaN
             float baseVal = Mathf.Clamp01(1f - (elapsed / duration));
             float damp = Mathf.Pow(baseVal, Mathf.Max(0.0001f, damping));
 
-            // Position shake
             transform.localPosition = originalPos + randomOffset * damp;
 
-            // Rotation shake
             if (useRotation)
             {
                 float rotZ = Random.Range(-rotationAmplitude, rotationAmplitude) * damp;
@@ -85,7 +80,6 @@ public class ScreenShake : MonoBehaviour
             yield return null;
         }
 
-        // Reset
         transform.localPosition = originalPos;
         transform.localRotation = originalRot;
         shakeRoutine = null;

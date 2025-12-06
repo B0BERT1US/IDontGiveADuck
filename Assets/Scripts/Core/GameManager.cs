@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Current Game State")]
     [SerializeField] private int score = 0;             // Player's current score
+
     public int Money => score;
     public string MoneyFormatted => "\u00A3" + score; // Added: formatted money with pound sign
 
@@ -42,18 +43,17 @@ public class GameManager : MonoBehaviour
 
     [Header("Grade System")]
     public string CurrentGrade { get; private set; } = "D";
+
     public System.Action<string> OnGradeChanged;
 
     // Grade thresholds based on MONEY (score)
     [Header("Grade Thresholds (Money)")]
     [SerializeField] private int gradeDThreshold = 0;
+
     [SerializeField] private int gradeCThreshold = 50;
     [SerializeField] private int gradeBThreshold = 100;
     [SerializeField] private int gradeAThreshold = 150;
     [SerializeField] private int gradeSThreshold = 200;
-
-
-
 
     [Header("Current Game State")]
     public Slider Timeslider;
@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
     public System.Action<GameState> OnGameStateChanged; // Fired when game state changes
     public System.Action<LevelData> OnLevelLoaded;      // Fired when a new level is loaded
     public BackgroundSwitch BGSwitch;
+
     #region Unity Lifecycle
 
     /// <summary>
@@ -342,9 +343,6 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(currentState);
     }
 
-
-
-
     /// <summary>
     /// Ends the current level (win or lose)
     ///
@@ -364,7 +362,6 @@ public class GameManager : MonoBehaviour
         {
             HandleGameOver();
         }
-
 
         currentState = won ? GameState.LevelComplete : GameState.GameOver;
 
@@ -619,6 +616,7 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion Scene Management
+
     private void UpdateGradeLive()
     {
         int money = score; // Score is money
@@ -637,8 +635,6 @@ public class GameManager : MonoBehaviour
             OnGradeChanged?.Invoke(CurrentGrade);
         }
     }
-
-
 
     /// <summary>
     /// GameState enumeration - defines all possible states of the game

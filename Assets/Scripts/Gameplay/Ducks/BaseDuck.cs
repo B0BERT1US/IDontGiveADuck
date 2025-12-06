@@ -18,7 +18,6 @@ public abstract class BaseDuck : MonoBehaviour
 
     [SerializeField] protected AudioClip[] clickSounds;
 
-
     [Header("Expire (Neutral)")]
     [SerializeField] protected ParticleSystem expireEffectNeutral;
 
@@ -213,7 +212,6 @@ public abstract class BaseDuck : MonoBehaviour
             int index = Random.Range(0, clickSounds.Length);
             AudioSource.PlayClipAtPoint(clickSounds[index], transform.position);
         }
-
 
         // Delay duck removal until effect finishes
         Destroy(gameObject, destroyDelay);

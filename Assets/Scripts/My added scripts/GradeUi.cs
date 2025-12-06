@@ -1,18 +1,18 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class GradeUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI gradeLabel;
     [SerializeField] private string prefix = "Grade: ";
 
-    void Awake()
+    private void Awake()
     {
         if (!gradeLabel)
             gradeLabel = GetComponent<TextMeshProUGUI>();
     }
 
-    void Update()
+    private void Update()
     {
         var gm = GameManager.Instance;
         if (gm == null || gradeLabel == null)
