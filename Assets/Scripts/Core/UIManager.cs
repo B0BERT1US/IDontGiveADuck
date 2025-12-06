@@ -354,9 +354,10 @@ public class UIManager : MonoBehaviour
             if (gameOverTitle != null)
                 gameOverTitle.text = "Level Complete!";
 
-            // Show the final score
+            // In ShowLevelComplete()
             if (finalScoreText != null && GameManager.Instance != null)
-                finalScoreText.text = $"Current Take: {GameManager.Instance.Score:N0}";
+                finalScoreText.text = $"Current Take: £{GameManager.Instance.Score:N0}";
+
 
             // Show/hide next level button based on whether there is a next level
             if (nextLevelButton != null)
@@ -407,8 +408,10 @@ public class UIManager : MonoBehaviour
             if (gameOverTitle != null)
                 gameOverTitle.text = "Game Complete";
 
+            // In ShowGameComplete()
             if (finalScoreText != null && GameManager.Instance != null)
-                finalScoreText.text = $"Final Score: {GameManager.Instance.Score:N0}";
+                finalScoreText.text = $"Final Take: £{GameManager.Instance.Score:N0}";
+
 
             // Hide next level button since game is complete
             if (nextLevelButton != null)

@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     [Header("Current Game State")]
     [SerializeField] private int score = 0;             // Player's current score
     public int Money => score;
+    public string MoneyFormatted => "\u00A3" + score; // Added: formatted money with pound sign
 
     [SerializeField] private int lives = 1;             // Remaining lives
     [SerializeField] private float timeLeft = 30f;      // Time remaining in current level

@@ -9,20 +9,15 @@ public class EndRoundScoreboard : MonoBehaviour
     void OnEnable()
     {
         var gm = GameManager.Instance;
-        if (gm == null)
+        if (gm == null) return;
+
+        if (moneyLabel)
+            moneyLabel.text = $"The Take: £{gm.Score}";
+
+        if (gradeLabel)
         {
-            if (moneyLabel) moneyLabel.text = "Final Take: £0";
-            if (gradeLabel) gradeLabel.text = "D";
-            return;
+            string grade = string.IsNullOrEmpty(gm.CurrentGrade) ? "D" : gm.CurrentGrade;
+            gradeLabel.text = grade;
         }
-
-        int money = gm.Score;
-        string grade = gm.CurrentGrade;
-
-        if (string.IsNullOrEmpty(grade))
-            grade = "D";
-
-        if (moneyLabel) moneyLabel.text = $"Final Take: £{money}";
-        if (gradeLabel) gradeLabel.text = grade;
     }
 }
