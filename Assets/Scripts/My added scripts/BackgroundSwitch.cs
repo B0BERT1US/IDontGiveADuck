@@ -1,3 +1,5 @@
+
+
 using UnityEngine;
 
 public class BackgroundSwitch : MonoBehaviour
@@ -23,19 +25,15 @@ public class BackgroundSwitch : MonoBehaviour
             case 1:
                 Hud_bg.sprite = BG1;
                 break;
-
             case 4:
                 Hud_bg.sprite = BG2;
                 break;
-
             case 7:
                 Hud_bg.sprite = BG3;
                 break;
-
             case 10:
                 Hud_bg.sprite = BG4;
                 break;
-
             default:
                 break;
         }
